@@ -1,0 +1,532 @@
+PHOTO_B64=$(cat /tmp/photo_b64.txt)
+cat > /mnt/user-data/outputs/jahnavi_portfolio.html << 'HTMLEOF'
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jahnavi Kanamarlapudi — Portfolio</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+<script src="https://unpkg.com/typed.js@2.0.15/dist/typed.umd.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:'Poppins',sans-serif}
+:root{--cyan:#0ef;--dark:#081b29;--text:#ededed}
+body{background:var(--dark);color:var(--text);overflow-x:hidden}
+
+/* ── HERO ── */
+.hero{position:relative;min-height:100vh;display:flex;align-items:center;padding:100px 10% 60px;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background-image:url('PHOTO_PLACEHOLDER');background-size:cover;background-position:center top;filter:blur(12px) brightness(0.35);transform:scale(1.08);z-index:0}
+.hero-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(8,27,41,0.7) 0%,rgba(8,27,41,0.4) 100%);z-index:1}
+.hero-content{position:relative;z-index:2;max-width:650px}
+.hero-content h3{font-size:28px;font-weight:500;opacity:0;animation:slideDown .8s ease .2s forwards}
+.hero-content h1{font-size:58px;font-weight:700;line-height:1.1;margin:4px 0;opacity:0;animation:slideRight .9s ease .4s forwards}
+.hero-content .role-line{font-size:26px;font-weight:500;margin-bottom:18px;opacity:0;animation:slideUp .8s ease .6s forwards}
+.hero-content .role-line span{color:var(--cyan)}
+.hero-content p{font-size:16px;line-height:1.8;color:#bbb;max-width:560px;opacity:0;animation:slideLeft .8s ease .8s forwards}
+.hero-sci{display:flex;gap:14px;margin:28px 0}
+.hero-sci a{display:inline-flex;justify-content:center;align-items:center;width:42px;height:42px;border:2px solid var(--cyan);border-radius:50%;font-size:20px;color:var(--cyan);text-decoration:none;transition:.4s;opacity:0;animation:slideLeft .8s ease calc(.9s + var(--d)) forwards}
+.hero-sci a:hover{background:var(--cyan);color:var(--dark);box-shadow:0 0 20px var(--cyan)}
+.btn-box{display:inline-block;padding:13px 30px;background:var(--cyan);border-radius:40px;font-size:15px;color:var(--dark);font-weight:600;text-decoration:none;letter-spacing:1px;opacity:0;animation:slideUp .8s ease 1.4s forwards;box-shadow:0 0 10px var(--cyan),0 0 30px rgba(0,238,255,0.3)}
+.btn-box:hover{box-shadow:0 0 10px var(--cyan),0 0 40px var(--cyan),0 0 80px rgba(0,238,255,0.4)}
+.hero-photo-frame{position:absolute;right:10%;top:50%;transform:translateY(-50%);z-index:2;opacity:0;animation:fadeIn 1s ease 1.2s forwards}
+.hero-photo-frame img{width:280px;height:280px;object-fit:cover;object-position:center top;border-radius:50%;border:4px solid var(--cyan);box-shadow:0 0 30px rgba(0,238,255,0.4)}
+
+/* ── SECTION COMMONS ── */
+section{padding:80px 10%}
+.section-title{text-align:center;margin-bottom:50px}
+.section-title h2{font-size:38px;font-weight:700}
+.section-title h2 span{color:var(--cyan)}
+.section-title p{color:#aaa;margin-top:8px;font-size:15px}
+
+/* ── ABOUT ── */
+.about{background:#0d2035}
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center}
+.about-photo img{width:100%;max-width:350px;border-radius:16px;border:3px solid var(--cyan);box-shadow:0 0 30px rgba(0,238,255,0.2);display:block;margin:auto}
+.about-text h3{font-size:24px;color:var(--cyan);margin-bottom:16px}
+.about-text p{color:#bbb;line-height:1.9;font-size:15px;margin-bottom:16px}
+.about-stats{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:24px}
+.stat-card{background:#081b29;border:1px solid rgba(0,238,255,0.2);border-radius:12px;padding:16px;text-align:center}
+.stat-card .num{font-size:28px;font-weight:700;color:var(--cyan)}
+.stat-card .label{font-size:12px;color:#aaa;margin-top:4px}
+
+/* ── SKILLS ── */
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px}
+.skill-cat{background:#0d2035;border:1px solid rgba(0,238,255,0.15);border-radius:14px;padding:24px}
+.skill-cat h3{font-size:16px;font-weight:600;color:var(--cyan);margin-bottom:16px;display:flex;align-items:center;gap:8px}
+.skill-tags{display:flex;flex-wrap:wrap;gap:8px}
+.tag{background:rgba(0,238,255,0.08);border:1px solid rgba(0,238,255,0.3);color:#ccc;padding:5px 12px;border-radius:20px;font-size:12px}
+
+/* ── EXPERIENCE ── */
+.exp{background:#0d2035}
+.exp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
+.exp-card{background:#081b29;border:1px solid rgba(0,238,255,0.2);border-radius:14px;padding:26px;position:relative;overflow:hidden}
+.exp-card::before{content:'';position:absolute;top:0;left:0;width:4px;height:100%;background:var(--cyan)}
+.exp-card h3{font-size:17px;font-weight:600;color:#fff;margin-bottom:4px}
+.exp-card .company{font-size:14px;color:var(--cyan);margin-bottom:4px}
+.exp-card .period{font-size:12px;color:#888;margin-bottom:14px}
+.exp-card ul{list-style:none;padding:0}
+.exp-card ul li{font-size:13px;color:#bbb;padding:4px 0 4px 16px;position:relative;line-height:1.6}
+.exp-card ul li::before{content:'▸';position:absolute;left:0;color:var(--cyan);font-size:11px;top:5px}
+
+/* ── PROJECTS ── */
+.projects-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px}
+.project-card{background:#0d2035;border:1px solid rgba(0,238,255,0.15);border-radius:14px;padding:26px;transition:.3s}
+.project-card:hover{border-color:var(--cyan);transform:translateY(-4px);box-shadow:0 8px 30px rgba(0,238,255,0.1)}
+.project-card .proj-icon{font-size:32px;margin-bottom:14px}
+.project-card h3{font-size:17px;font-weight:600;margin-bottom:10px}
+.project-card .proj-tech{font-size:11px;color:var(--cyan);font-weight:500;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px}
+.project-card p{font-size:13px;color:#aaa;line-height:1.7}
+
+/* ── ACHIEVEMENTS ── */
+.achieve{background:#0d2035}
+.achieve-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
+.achieve-card{background:#081b29;border:1px solid rgba(0,238,255,0.15);border-radius:12px;padding:20px;display:flex;align-items:flex-start;gap:14px}
+.achieve-card .icon{font-size:24px;flex-shrink:0;margin-top:2px}
+.achieve-card p{font-size:13px;color:#ccc;line-height:1.6}
+
+/* ── EDUCATION ── */
+.edu-timeline{position:relative;max-width:800px;margin:0 auto}
+.edu-timeline::before{content:'';position:absolute;left:20px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--cyan),transparent)}
+.edu-item{display:flex;gap:24px;margin-bottom:36px;padding-left:50px;position:relative}
+.edu-item::before{content:'';position:absolute;left:11px;top:6px;width:18px;height:18px;border-radius:50%;background:var(--dark);border:3px solid var(--cyan);box-shadow:0 0 10px var(--cyan)}
+.edu-item .edu-info h3{font-size:16px;font-weight:600;color:#fff}
+.edu-item .edu-info .school{font-size:13px;color:var(--cyan);margin:4px 0}
+.edu-item .edu-info .year{font-size:12px;color:#888}
+
+/* ── CONTACT ── */
+
+
+.contact{
+    padding:80px 10%;
+    background:#081b29;
+}
+
+.contact-container{
+    display:flex;
+    justify-content:space-between;
+    gap:60px;
+    flex-wrap:wrap;
+}
+
+.contact-left{
+    flex:1;
+    min-width:300px;
+}
+
+.contact-left h2{
+    font-size:60px;
+    line-height:1.1;
+}
+
+.contact-left h2 span{
+    color:#0ef;
+}
+
+.contact-left h4{
+    margin:25px 0 15px;
+    font-size:24px;
+}
+
+.contact-left p{
+    color:#bdbdbd;
+    line-height:1.8;
+    margin-bottom:15px;
+}
+
+.contact-info p{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.contact-info i{
+    color:#0ef;
+    font-size:20px;
+}
+
+.social-icons{
+    margin-top:30px;
+}
+
+.social-icons a{
+    display:inline-flex;
+    justify-content:center;
+    align-items:center;
+    width:40px;
+    height:40px;
+    border:2px solid #0ef;
+    border-radius:50%;
+    color:#0ef;
+    text-decoration:none;
+    margin-right:10px;
+    transition:.3s;
+}
+
+.social-icons a:hover{
+    background:#0ef;
+    color:#081b29;
+    box-shadow:0 0 20px #0ef;
+}
+
+.contact-right{
+    flex:1;
+    min-width:320px;
+}
+
+.contact-right form{
+    display:flex;
+    flex-direction:column;
+    gap:15px;
+}
+
+.contact-right input,
+.contact-right textarea{
+    width:100%;
+    padding:15px;
+    border:none;
+    outline:none;
+    background:#555;
+    color:#fff;
+    border-radius:8px;
+}
+
+.contact-right textarea{
+    resize:none;
+}
+
+.contact-right button{
+    padding:14px;
+    border:none;
+    border-radius:30px;
+    background:#0ef;
+    color:#081b29;
+    font-weight:600;
+    cursor:pointer;
+    box-shadow:0 0 15px #0ef;
+    transition:.3s;
+}
+
+.contact-right button:hover{
+    box-shadow:0 0 25px #0ef;
+}
+/* ── HEADER ── */
+header{position:fixed;top:0;left:0;right:0;padding:16px 10%;background:rgba(8,27,41,0.9);backdrop-filter:blur(10px);display:flex;justify-content:space-between;align-items:center;z-index:100;border-bottom:1px solid rgba(0,238,255,0.1)}
+.logo{font-size:22px;font-weight:700;color:#fff;text-decoration:none}
+.logo span{color:var(--cyan)}
+nav a{color:#ccc;text-decoration:none;font-size:14px;font-weight:500;margin-left:28px;transition:.3s}
+nav a:hover{color:var(--cyan)}
+
+/* ── FOOTER ── */
+footer{text-align:center;padding:24px;background:#060f18;color:#555;font-size:13px}
+
+/* ── ANIMATIONS ── */
+@keyframes slideDown{from{transform:translateY(-40px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes slideRight{from{transform:translateX(-60px);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes slideLeft{from{transform:translateX(60px);opacity:0}to{transform:translateX(0);opacity:1}}
+@keyframes slideUp{from{transform:translateY(40px);opacity:0}to{transform:translateY(0);opacity:1}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+@media(max-width:768px){
+  .hero-content h1{font-size:36px}
+  .hero-photo-frame{display:none}
+  .about-grid{grid-template-columns:1fr}
+  nav a{margin-left:14px;font-size:12px}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a href="#" class="logo">Jahnavi<span>.</span></a>
+  <nav>
+    <a href="#about">About</a>
+    <a href="#skills">Skills</a>
+    <a href="#experience">Experience</a>
+    <a href="#projects">Projects</a>
+    <a href="#contact">Contact</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="home">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <h3>Hello, It's Me</h3>
+    <h1>Jahnavi<br>Kanamarlapudi</h1>
+    <div class="role-line">And I'm a <span class="typed-text"></span></div>
+    <p>Results-driven Data Analyst with hands-on experience in SQL, Python, Power BI, and ETL pipelines. Passionate about data storytelling and cross-functional collaboration. Solved 100+ LeetCode problems.</p>
+    <div class="hero-sci">
+      <a href="mailto:kanamarlapudijahnavi418@gmail.com" style="--d:0s" title="Email"><i class='bx bx-envelope'></i></a>
+      <a href="https://linkedin.com/in/jahnavi-kanamarlapudi-39b308360" target="_blank" style="--d:.1s" title="LinkedIn"><i class='bx bxl-linkedin'></i></a>
+      <a href="https://github.com/jahnavi418" target="_blank" style="--d:.1s" title="Github"><i class='bx bxl-github'></i></a>
+      <a href="tel:+918074125851" style="--d:.2s" title="Phone"><i class='bx bx-phone'></i></a>
+    </div>
+    <a href="#contact" class="btn-box">Get In Touch</a>
+  </div>
+  <div class="hero-photo-frame">
+    <img src="C:\Users\jahnavi\Downloads\ChatGPT Image Jun 19, 2026, 06_44_27 PM.png" alt="Jahnavi Kanamarlapudi">
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="about">
+  <div class="section-title">
+    <h2>About <span>Me</span></h2>
+    <p>A passionate Data Analyst from Markapur, AP</p>
+  </div>
+  <div class="about-grid">
+    <div class="about-photo">
+      <img src="C:\Users\jahnavi\Downloads\ChatGPT Image Jun 19, 2026, 06_44_27 PM.png"alt="Jahnavi">
+    </div>
+    <div class="about-text">
+      <h3>Data Analyst & ML Enthusiast</h3>
+      <p>I'm a Computer Science Engineering student at Krishna Chaitanya Institute of Technology and Sciences (2022–2026), deeply passionate about transforming complex datasets into actionable business insights.</p>
+      <p>With expertise in SQL, Python, Power BI, and Machine Learning, I build end-to-end analytics pipelines — from raw data to interactive dashboards. I'm also an active competitive programmer with 100+ LeetCode problems solved.</p>
+      <div class="about-stats">
+        <div class="stat-card"><div class="num">100+</div><div class="label">LeetCode Problems</div></div>
+        <div class="stat-card"><div class="num">3</div><div class="label">Internships</div></div>
+        <div class="stat-card"><div class="num">5+</div><div class="label">Projects Built</div></div>
+        <div class="stat-card"><div class="num">4+</div><div class="label">Certifications</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section class="skills" id="skills">
+  <div class="section-title">
+    <h2>Technical <span>Skills</span></h2>
+    <p>Technologies and tools I work with</p>
+  </div>
+  <div class="skills-grid">
+    <div class="skill-cat">
+      <h3><i class='bx bx-code-alt'></i> Languages & Databases</h3>
+      <div class="skill-tags">
+        <span class="tag">Python</span><span class="tag">SQL</span><span class="tag">Java (basics)</span><span class="tag">C</span><span class="tag">HTML</span><span class="tag">CSS</span>
+      </div>
+    </div>
+    <div class="skill-cat">
+      <h3><i class='bx bx-bar-chart-alt-2'></i> Data & Analytics</h3>
+      <div class="skill-tags">
+        <span class="tag">Pandas</span><span class="tag">NumPy</span><span class="tag">Matplotlib</span><span class="tag">Seaborn</span><span class="tag">Power BI</span><span class="tag">Excel</span><span class="tag">DAX</span><span class="tag">Scikit-learn</span>
+      </div>
+    </div>
+    <div class="skill-cat">
+      <h3><i class='bx bx-transfer'></i> ETL & Engineering</h3>
+      <div class="skill-tags">
+        <span class="tag">Pandas Pipelines</span><span class="tag">Data Extraction</span><span class="tag">Transformation</span><span class="tag">Data Cleaning</span><span class="tag">Loading</span>
+      </div>
+    </div>
+    <div class="skill-cat">
+      <h3><i class='bx bx-brain'></i> ML / AI</h3>
+      <div class="skill-tags">
+        <span class="tag">Machine Learning</span><span class="tag">Deep Learning</span><span class="tag">K-Means Clustering</span><span class="tag">CNNs</span><span class="tag">Transfer Learning</span>
+      </div>
+    </div>
+    <div class="skill-cat">
+      <h3><i class='bx bx-wrench'></i> Tools & Platforms</h3>
+      <div class="skill-tags">
+        <span class="tag">Git</span><span class="tag">GitHub</span><span class="tag">VS Code</span><span class="tag">Google Colab</span><span class="tag">Jupyter Notebook</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCE -->
+<section class="exp" id="experience">
+  <div class="section-title">
+    <h2>Work <span>Experience</span></h2>
+    <p>Internships and professional training</p>
+  </div>
+  <div class="exp-grid">
+    <div class="exp-card">
+      <h3>Data Analytics Virtual Job Simulation</h3>
+      <div class="company">Deloitte (Forage)</div>
+      <div class="period">Sep – Oct 2025</div>
+      <ul>
+        <li>Completed Forensic Technology simulation; analyzed datasets to detect trends and irregularities relevant to business investigations.</li>
+        <li>Delivered structured findings simulating real client-facing analyst deliverables.</li>
+      </ul>
+    </div>
+    <div class="exp-card">
+      <h3>Data Science Intern</h3>
+      <div class="company">Reshapp Software Solutions</div>
+      <div class="period">Jun – Aug 2025</div>
+      <ul>
+        <li>Built and evaluated ML models for real-world datasets.</li>
+        <li>Performed feature engineering and data preprocessing using Python.</li>
+      </ul>
+    </div>
+    <div class="exp-card">
+      <h3>Full Stack Python Developer Intern</h3>
+      <div class="company">Naresh Technologies</div>
+      <div class="period">Jun – Jul 2024</div>
+      <ul>
+        <li>Developed Python-based web features for production applications.</li>
+        <li>Collaborated on testing and debugging modules.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECTS -->
+<section class="projects" id="projects">
+  <div class="section-title">
+    <h2>Featured <span>Projects</span></h2>
+    <p>End-to-end data and ML projects</p>
+  </div>
+  <div class="projects-grid">
+    <div class="project-card" 
+     onclick="window.open('https://github.com/jahnavi418/SQL-Business-Intelligence-Project','_blank')"
+     style="cursor:pointer;">
+      <div class="proj-icon">🗄️</div>
+      <div class="proj-tech">SQL</div>
+      <h3>End-to-End SQL Data Analytics</h3>
+      <p>
+        Designed a complete analytics pipeline using 14 SQL scripts covering EDA, ranking, segmentation and part-to-whole analysis across 3 datasets (customers, products, sales) to generate KPI reports.</p>
+    
+    </div>
+    <div class="project-card"
+     onclick="window.open('https://github.com/jahnavi418/retail-sales-customer-segmentation','_blank')"
+     style="cursor:pointer;">
+      <div class="proj-icon">🛒</div>
+      <div class="proj-tech">Python · Power BI · K-Means / RFM</div>
+      <h3>Retail Sales & Customer Segmentation</h3>
+      <p>Analyzed 50,000+ transactions using Python; applied K-Means/RFM clustering and built Power BI dashboards showing CLV and revenue by segment — projected 15% marketing efficiency gain.</p>
+    </div>
+    <div class="project-card"
+     onclick="window.open('https://github.com/jahnavi418/vendor-performance-analysis','_blank')"
+     style="cursor:pointer;">
+      <div class="proj-icon">📦</div>
+      <div class="proj-tech">SQL · Python · Power BI</div>
+      <h3>Vendor Performance Analysis</h3>
+      <p>Analyzed 8,566 procurement records using SQL KPIs (Gross Profit, Stock Turnover, Profit Margin); conducted EDA with Hypothesis Testing and built a Power BI dashboard with DAX and drill-through.</p>
+    </div>
+    <div class="project-card"
+     onclick="window.open('https://github.com/jahnavi418/automated-recongition-of-fruit-variates-using-image-based-neural-classification-model','_blank')"
+     style="cursor:pointer;">
+      <div class="proj-icon">🍎</div>
+      <div class="proj-tech">Deep Learning · CNN · ResNet50V2</div>
+      <h3>Automated Fruit Variety Recognition</h3>
+      <p>Trained CNN image classifier using ResNet50V2 transfer learning with augmentation; evaluated on Accuracy, Precision, Recall, and F1-Score metrics.</p>
+    </div>
+    <div class="project-card"
+     onclick="window.open('https://github.com/jahnavi418/e-commerce-dashboard','_blank')"
+     style="cursor:pointer;">
+      <div class="proj-icon">📊</div>
+      <div class="proj-tech">Excel · DAX · Pivot Tables</div>
+      <h3>E-Commerce Sales Dashboard</h3>
+      <p>Built interactive dashboard with Pivot Tables, Slicers, and DAX to analyze sales trends; produced KPI cards for business insights and decision-making.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ACHIEVEMENTS -->
+<section class="achieve" id="achievements">
+  <div class="section-title">
+    <h2>Achievements & <span>Certifications</span></h2>
+    <p>Recognition and learning milestones</p>
+  </div>
+  <div class="achieve-grid">
+    <div class="achieve-card"><div class="icon">🏅</div><p><strong>Microsoft AI Skills Fest</strong> — Earned official Microsoft badge for completing AI skills challenges (2025)</p></div>
+    <div class="achieve-card"><div class="icon">💻</div><p><strong>LeetCode 100+</strong> — Solved 100+ problems across Data Structures & Algorithms demonstrating strong problem-solving skills</p></div>
+    <div class="achieve-card"><div class="icon">📋</div><p><strong>Oracle AI Foundations Associate</strong> — Race to Certification (Oracle University, 2025)</p></div>
+    <div class="achieve-card"><div class="icon">🔍</div><p><strong>Deloitte Data Analytics</strong> — Virtual Job Simulation – Forensic Technology (Forage, 2025)</p></div>
+    <div class="achieve-card"><div class="icon">🐍</div><p><strong>Python Skill Test Certification</strong> — Great Learning Academy | Data Science – Reshapp Software Solutions</p></div>
+    <div class="achieve-card"><div class="icon">🌐</div><p><strong>Full Stack Python Developer</strong> — Certification from Naresh Technologies & Consultancy Services</p></div>
+  </div>
+</section>
+
+<!-- EDUCATION -->
+<section class="education" id="education">
+  <div class="section-title">
+    <h2>My <span>Education</span></h2>
+    <p>Academic journey and qualifications</p>
+  </div>
+  <div class="edu-timeline">
+    <div class="edu-item">
+      <div class="edu-info">
+        <h3>B.Tech in Computer Science & Engineering</h3>
+        <div class="school">Krishna Chaitanya Institute of Technology and Sciences</div>
+        <div class="year">2022 – 2026</div>
+      </div>
+    </div>
+    <div class="edu-item">
+      <div class="edu-info">
+        <h3>Board of Intermediate Education (12th)</h3>
+        <div class="school">Sri Reddy Women's Junior College</div>
+        <div class="year">2020 – 2022</div>
+      </div>
+    </div>
+    <div class="edu-item">
+      <div class="edu-info">
+        <h3>Board of Secondary School Education (10th)</h3>
+        <div class="school">Sri Vivekananda Vidya Peetham</div>
+        <div class="year">2019 – 2020</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+
+<section class="contact" id="contact">
+    <div class="contact-container">
+
+        <div class="contact-left">
+            <h2>Contact <span>Me</span></h2>
+
+            <h4>Let's work Together</h4>
+
+            <p>
+                I'm always open to discussing Data Analyst roles,
+                internships, projects, and collaboration opportunities.
+                Feel free to reach out anytime.
+            </p>
+
+            <div class="contact-info">
+                <p><i class='bx bx-envelope'></i> kanamarlapudijahnavi418@gmail.com</p>
+                <p><i class='bx bx-phone'></i> +91 80741 25851</p>
+            </div>
+
+            <div class="social-icons">
+                <a href="mailto:kanamarlapudijahnavi418@gmail.com"><i class='bx bxl-gmail'></i></a>
+                
+                <a href="https://github.com/jahnavi418/"><i class='bx bxl-github'></i></a>
+               
+                <a href="https://linkedin.com/in/jahnavi-kanamarlapudi-39b308360"><i class='bx bxl-linkedin'></i></a>
+            </div>
+        </div>
+
+        <div class="contact-right">
+            <form>
+                <input type="text" placeholder="Enter Your Name" required>
+
+                <input type="email" placeholder="Enter Your Email" required>
+
+                <input type="text" placeholder="Enter Your Subject">
+
+                <textarea rows="8" placeholder="Enter Your Message"></textarea>
+
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+
+    </div>
+</section>
+
+<footer>
+  <p>© 2025 Kanamarlapudi Jahnavi · Built with ❤️ · All rights reserved</p>
+</footer>
+
+<script>
+new Typed(".typed-text",{strings:["Data Analyst","SQL Developer","Power BI Expert"],typeSpeed:90,backSpeed:70,backDelay:1200,loop:true});
+</script>
+</body>
+</html>
+HTMLEOF
+
+echo "File created"
+Done
